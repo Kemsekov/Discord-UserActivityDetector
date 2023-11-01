@@ -1,0 +1,10 @@
+**/bin
+**/obj
+**/publish
+**/*.txt
+**/*.jpg
+**/.vscode
+**/graph.json
+**/Temp
+**/*.log
+**/secrets.json
