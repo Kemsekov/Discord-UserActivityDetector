@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using TelegramBot.App.Helpers;
 
-// TODO: add abstraction layer over commands names and options and their description
-
 /// <summary>
 /// Place that contains reference to global application running, so it could be accessed from everywhere
 /// </summary>
@@ -34,7 +32,7 @@ public static class AppInstance
         
         services.AddSingletonFromAssembly<ISlashCommandSource>(typeof(ISlashCommandSource).Assembly);
         services.AddSingletonFromAssembly<ISlashCommandHandler>(typeof(ISlashCommandHandler).Assembly);
-
+        services.AddSingleton<IPresenceUpdateHandler,PresenceUpdateHandler>();
         services.AddHostedService<BotHostedService>();
 
     }

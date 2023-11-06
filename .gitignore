@@ -8,3 +8,4 @@
 **/Temp
 **/*.log
 **/secrets.json
+**/Migrations

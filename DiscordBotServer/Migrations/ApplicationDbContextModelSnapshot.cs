@@ -51,6 +51,10 @@ namespace DiscordBotServer.Migrations
 
             modelBuilder.Entity("DiscordBotServer.App.Models.UserPresenceLog", b =>
                 {
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -59,6 +63,8 @@ namespace DiscordBotServer.Migrations
 
                     b.Property<decimal>("UserId")
                         .HasColumnType("numeric(20,0)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 

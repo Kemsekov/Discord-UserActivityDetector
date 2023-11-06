@@ -21,7 +21,8 @@ public class BotHostedService : IHostedService
         ILogger<IDiscordClient> logger, 
         ApplicationDbContext db,
         IEnumerable<ISlashCommandSource> commandsSource,
-        IEnumerable<ISlashCommandHandler> slashCommandHandlers)
+        IEnumerable<ISlashCommandHandler> slashCommandHandlers,
+        IPresenceUpdateHandler presenceUpdateHandler) 
     {
         _slashCommandHandlers = slashCommandHandlers.ToDictionary(x=>x.CommandName);
         _commandsSource = commandsSource;
@@ -31,16 +32,7 @@ public class BotHostedService : IHostedService
             logger.Log(LogLevel.Information,e.ToString());
             return Task.CompletedTask;
         };
-        _discordClient.PresenceUpdated+= async (u,pOld,pNew)=>{
-            if(u is IGuildUser ug){
-                System.Console.WriteLine(ug.Guild.Name);
-                var chats = await ug.Guild.GetTextChannelsAsync();
-            }
-            System.Console.WriteLine("presence updated");
-            System.Console.WriteLine(u.Username);
-            System.Console.WriteLine(u.Status);
-        };
-        
+        _discordClient.PresenceUpdated+= (u,pOld,pNew)=>presenceUpdateHandler.Handle(_discordClient,u,pOld,pNew);
         _discordClient.SlashCommandExecuted += 
             command=>_slashCommandHandlers[command.CommandName].Handle(command,_discordClient);
         

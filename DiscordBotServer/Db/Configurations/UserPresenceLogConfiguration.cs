@@ -8,7 +8,7 @@ public class UserPresenceLogConfiguration : IEntityTypeConfiguration<UserPresenc
     public void Configure(EntityTypeBuilder<UserPresenceLog> builder)
     {
         builder.HasOne(x=>x.User);
-        builder.HasIndex(x=>x.UserId);
-        builder.HasNoKey();
+        builder.HasKey(x=>x.Id);
+        builder.Property(x=>x.Id).ValueGeneratedOnAdd();
     }
 }
