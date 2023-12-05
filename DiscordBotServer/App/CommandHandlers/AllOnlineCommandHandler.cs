@@ -8,9 +8,9 @@ namespace DiscordBotServer.App;
 public class AllOnlineCommandHandler : ISlashCommandHandler
 {
     private ApplicationDbContext _db;
-    private LastOnlineCommand _command;
+    private AllOnlineCommand _command;
 
-    public AllOnlineCommandHandler(ApplicationDbContext db, LastOnlineCommand command)
+    public AllOnlineCommandHandler(ApplicationDbContext db, AllOnlineCommand command)
     {
         _db = db;
         _command = command;
