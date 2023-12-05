@@ -23,6 +23,9 @@ public class PresenceUpdateHandler : IPresenceUpdateHandler
     }
     public async Task Handle(DiscordSocketClient client, SocketUser user, SocketPresence oldPresence, SocketPresence newPresence)
     {
+        await Task.Yield();
+        #pragma warning disable
+        Task.Run(async ()=>{
         var online = newPresence.Status==UserStatus.Online;
         var offline = newPresence.Status==UserStatus.Offline;
         if(!online && !offline) return;
@@ -49,5 +52,6 @@ public class PresenceUpdateHandler : IPresenceUpdateHandler
 
         // replace with raw http
         await client.SetGameAsync(string.Join("\n",new[]{lastPresence.Username.ToString(),lastPresence.LastPresence.ToString()}));
+        });
     }
 }
