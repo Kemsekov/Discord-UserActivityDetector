@@ -40,7 +40,7 @@ public class LastOnlineCommandHandler : ISlashCommandHandler
                 result.Append($"Активность отсутствует для {user.GlobalName}\n");
             foreach (var log in logs)
             {
-                result.Append($"{log.DateTime} {(log.Online ? "Online" : "Offline")}\n");
+                result.Append($"<t:{log.DateTime.ToUniversalTime().Ticks}:f> {(log.Online ? "Online" : "Offline")}\n");
             }
             await command.RespondAsync(result.ToString(), ephemeral: true);
         });

@@ -53,7 +53,7 @@ public class PresenceUpdateHandler : IPresenceUpdateHandler
             .First();
 
             // replace with raw http
-            await client.SetGameAsync(string.Join("\n", new[] { lastPresence.Username.ToString(), lastPresence.LastPresence.ToString() }));
+            await client.SetGameAsync(string.Join("\n", new[] { lastPresence.Username.ToString(), $"<t:{lastPresence.LastPresence.ToUniversalTime().Ticks}:f>" }));
         });
     }
 }

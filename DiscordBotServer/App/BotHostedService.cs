@@ -43,6 +43,7 @@ public class BotHostedService : IHostedService
             System.Console.WriteLine("Added to new guild!");
             foreach(var c in _commandsSource)
                 g.CreateApplicationCommandAsync(c.CommandBuilder.Build());
+            g.DownloadUsersAsync();
             return Task.CompletedTask;
         };
     }
