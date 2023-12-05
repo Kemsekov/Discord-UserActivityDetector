@@ -36,7 +36,8 @@ public class AllOnlineCommandHandler : ISlashCommandHandler
                 result.Append($"Активность отсутствует для сервера\n");
             foreach (var log in logs)
             {
-                result.Append($"<t:{log.DateTime.ToUniversalTime().Ticks}:f> {(log.Online ? "Online" : "Offline")}\n");
+                long unixTime = ((DateTimeOffset)log.DateTime.ToUniversalTime()).ToUnixTimeSeconds();
+                result.Append($"<t:{unixTime}:f> {(log.Online ? "Online" : "Offline")}\n");
             }
             await command.RespondAsync(result.ToString(), ephemeral: true);
         });

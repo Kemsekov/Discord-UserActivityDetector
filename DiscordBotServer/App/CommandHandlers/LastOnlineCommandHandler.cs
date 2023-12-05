@@ -27,22 +27,23 @@ public class LastOnlineCommandHandler : ISlashCommandHandler
 #pragma warning disable
         Task.Run(async () =>
         {
-        //insert useless raw https that gets all server's users, and uses one with Id eq to command.Data.Options[0]
-        var user = (SocketUser)command.Data.Options.ElementAt(0).Value;
-        Int64 n = 1;
-        if (command.Data.Options.Count() > 1)
-            n = (Int64)command.Data.Options.ElementAt(1).Value;
-        var logs = _db.PresenceLogs.OrderByDescending(x => x.DateTime).Where(x => x.UserId == user.Id).Take((int)n).ToArray();
-        var result = new StringBuilder();
-        if (logs.Length != 0)
-            result.Append($"Последний онлайн {user.GlobalName}\n");
-        else
-            result.Append($"Активность отсутствует для {user.GlobalName}\n");
-        foreach (var log in logs)
-        {
-            result.Append($"<t:{log.DateTime.ToUniversalTime().Ticks}:f> {(log.Online ? "Online" : "Offline")}\n");
-        }
-        await command.RespondAsync(result.ToString(), ephemeral: true);
-    });
+            //insert useless raw https that gets all server's users, and uses one with Id eq to command.Data.Options[0]
+            var user = (SocketUser)command.Data.Options.ElementAt(0).Value;
+            Int64 n = 1;
+            if (command.Data.Options.Count() > 1)
+                n = (Int64)command.Data.Options.ElementAt(1).Value;
+            var logs = _db.PresenceLogs.OrderByDescending(x => x.DateTime).Where(x => x.UserId == user.Id).Take((int)n).ToArray();
+            var result = new StringBuilder();
+            if (logs.Length != 0)
+                result.Append($"Последний онлайн {user.GlobalName}\n");
+            else
+                result.Append($"Активность отсутствует для {user.GlobalName}\n");
+            foreach (var log in logs)
+            {
+                long unixTime = ((DateTimeOffset)log.DateTime.ToUniversalTime()).ToUnixTimeSeconds();
+                result.Append($"<t:{unixTime}:f> {(log.Online ? "Online" : "Offline")}\n");
+            }
+            await command.RespondAsync(result.ToString(), ephemeral: true);
+        });
     }
 }
