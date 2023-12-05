@@ -25,6 +25,8 @@ public class LastOnlineCommandHandler : ISlashCommandHandler
     {
         await Task.Yield();
 #pragma warning disable
+        Task.Run(async () =>
+        {
         //insert useless raw https that gets all server's users, and uses one with Id eq to command.Data.Options[0]
         var user = (SocketUser)command.Data.Options.ElementAt(0).Value;
         Int64 n = 1;
@@ -41,5 +43,6 @@ public class LastOnlineCommandHandler : ISlashCommandHandler
             result.Append($"<t:{log.DateTime.ToUniversalTime().Ticks}:f> {(log.Online ? "Online" : "Offline")}\n");
         }
         await command.RespondAsync(result.ToString(), ephemeral: true);
+    });
     }
 }
