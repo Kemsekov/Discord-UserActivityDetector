@@ -39,6 +39,12 @@ public class BotHostedService : IHostedService
         _discordClient.LoginAsync(TokenType.Bot,conf["Token"]).Wait();
         _discordClient.DownloadUsersAsync(_discordClient.Guilds);
         discordClient.Ready += RegisterCommands;
+        discordClient.GuildScheduledEventCreated += (g)=>{
+            System.Console.WriteLine("Added to new guild!");
+            foreach(var c in _commandsSource)
+                g.Guild.CreateApplicationCommandAsync(c.CommandBuilder.Build());
+            return Task.CompletedTask;
+        };
     }
     public Task RegisterCommands(){
         foreach(var g in _discordClient.Guilds)
