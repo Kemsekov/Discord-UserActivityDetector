@@ -53,8 +53,8 @@ public class PresenceUpdateHandler : IPresenceUpdateHandler
             .First();
 
             // replace with raw http
-            long unixTime = ((DateTimeOffset)lastPresence.LastPresence.ToUniversalTime()).ToUnixTimeSeconds();
-            await client.SetGameAsync(string.Join("\n", new[] { lastPresence.Username.ToString(), $"<t:{unixTime}:f>" }));
+            // long unixTime = ((DateTimeOffset)lastPresence.LastPresence.ToUniversalTime()).ToUnixTimeSeconds();
+            await client.SetGameAsync(string.Join("\n", new[] { lastPresence.Username.ToString(), lastPresence.LastPresence.ToUniversalTime().ToString() }));
         });
     }
 }
