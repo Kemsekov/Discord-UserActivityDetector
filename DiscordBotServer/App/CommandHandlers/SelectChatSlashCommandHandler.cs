@@ -42,7 +42,7 @@ public class SelectLogChatCommandHandler : ISlashCommandHandler
             g.ChannelLogId = channel.Id;
 
 
-            _db.Update(g);
+            _db.Guilds.Update(g);
             _db.SaveChanges();
             await command.RespondAsync($"Выбран чат {channel.Name}", ephemeral: true);
 
