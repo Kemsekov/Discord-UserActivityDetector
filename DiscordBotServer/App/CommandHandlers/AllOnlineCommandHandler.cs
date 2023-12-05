@@ -26,17 +26,22 @@ public class AllOnlineCommandHandler : ISlashCommandHandler
                 n = (Int64)command.Data.Options.First().Value;
             if (command.GuildId is null) return;
             var guild = client.GetGuild(command.GuildId ?? 0);
-            var users = guild.Users.Select(u => u.Id).ToArray();
-            var logs = _db.PresenceLogs.Where(l=>users.Contains(l.UserId)).OrderByDescending(x => x.DateTime).Take((int)n).ToArray();
+
+            var users = guild.Users.ToArray();
+            var usersId =users.Select(u => u.Id).ToArray();
+            var logs = _db.PresenceLogs.Where(l=>usersId.Contains(l.UserId)).OrderByDescending(x => x.DateTime).Take((int)n).ToArray();
             var result = new StringBuilder();
             if (logs.Length != 0)
                 result.Append($"Последний онлайн сервера\n");
             else
                 result.Append($"Активность отсутствует для сервера\n");
-            foreach (var log in logs)
+            var userLogs = users.Join(logs,u=>u.Id,l=>l.UserId,(u,l)=>(u,l));
+            foreach (var userLog in userLogs)
             {
+                var log = userLog.l;
+                var user = userLog.u;
                 long unixTime = ((DateTimeOffset)log.DateTime.ToUniversalTime()).ToUnixTimeSeconds();
-                result.Append($"<t:{unixTime}:f> {(log.Online ? "Online" : "Offline")}\n");
+                result.Append($"{user.Username} <t:{unixTime}:f> {(log.Online ? "Online" : "Offline")}\n");
             }
             await command.RespondAsync(result.ToString(), ephemeral: true);
     }
