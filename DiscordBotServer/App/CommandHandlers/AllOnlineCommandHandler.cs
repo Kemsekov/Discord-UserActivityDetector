@@ -21,9 +21,6 @@ public class AllOnlineCommandHandler : ISlashCommandHandler
     {
         await Task.Yield();
 #pragma warning disable
-        Task.Run(async () =>
-        {
-            
             Int64 n = 1;
             if (command.Data.Options.Count() > 0)
                 n = (Int64)command.Data.Options.First().Value;
@@ -42,6 +39,5 @@ public class AllOnlineCommandHandler : ISlashCommandHandler
                 result.Append($"<t:{unixTime}:f> {(log.Online ? "Online" : "Offline")}\n");
             }
             await command.RespondAsync(result.ToString(), ephemeral: true);
-        });
     }
 }
