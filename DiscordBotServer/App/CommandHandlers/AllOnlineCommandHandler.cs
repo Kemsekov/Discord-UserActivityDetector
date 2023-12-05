@@ -35,7 +35,7 @@ public class AllOnlineCommandHandler : ISlashCommandHandler
                 result.Append($"Последний онлайн сервера\n");
             else
                 result.Append($"Активность отсутствует для сервера\n");
-            var userLogs = users.Join(logs,u=>u.Id,l=>l.UserId,(u,l)=>(u,l));
+            var userLogs = users.Join(logs,u=>u.Id,l=>l.UserId,(u,l)=>(u,l)).OrderByDescending(x => x.l.DateTime);
             foreach (var userLog in userLogs)
             {
                 var log = userLog.l;
